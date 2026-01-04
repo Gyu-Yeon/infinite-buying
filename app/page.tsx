@@ -65,13 +65,16 @@
 import Content from "@/components/layout/content";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/Header";
+import Providers from "./providers";
 
 export default function Home() {
-    return (
-        <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-50 gap-6">
-            <Header />
-            <Content />
-            <Footer />
-        </div>
-    );
+  return (
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-50 gap-6">
+      <Providers>
+        <Header />
+        <Content />
+        <Footer />
+      </Providers>
+    </div>
+  );
 }
