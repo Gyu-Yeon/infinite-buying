@@ -1,13 +1,9 @@
 import "./globals.css";
 
-export default function RootLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    return (
-        <html lang="en">
-            <body className="w-full h-full overflow-hidden">{children}</body>
-        </html>
-    );
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className="w-full h-full overflow-auto">{children}</body>
+    </html>
+  );
 }

@@ -2,16 +2,17 @@
 
 import { useData } from "@/app/providers/DataProvider";
 import { Card, CardHeader } from "../ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts";
-
-const chartData = [
-  { day: 1, 종가: 25, 평단가: 25, "수익률(%)": 0 },
-  { day: 2, 종가: 24.42, 평단가: 24.71, "수익률(%)": -1.2 },
-  { day: 3, 종가: 24.81, 평단가: 24.76, "수익률(%)": 0.2 },
-];
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 export default function Content() {
-  const { data } = useData();
+  const { chartData } = useData();
+
+  const filteredChartData = chartData.map((data) => ({
+    day: data.days,
+    close: data.currentValuation / data.shares,
+    averagePrice: data.averagePrice,
+    profitLoss: data.profitLoss,
+  }));
 
   return (
     <div className="w-[90%]">
@@ -19,9 +20,7 @@ export default function Content() {
         <CardHeader>
           가격 & 평단가 추이
           <ResponsiveContainer width="100%" height={300}>
-            {/* 여기에 차트 내용 */}
-            <LineChart data={chartData}>
-              {/* 차트 구성 요소들 */}
+            <LineChart data={filteredChartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="day"
@@ -33,6 +32,7 @@ export default function Content() {
               />
               <YAxis
                 yAxisId="left"
+                domain={["dataMin - 5", "dataMax + 5"]} // 최솟값-5 ~ 최댓값+5
                 label={{
                   value: "가격 ($)",
                   angle: -90,
@@ -42,21 +42,26 @@ export default function Content() {
               <YAxis
                 yAxisId="right"
                 orientation="right"
+                domain={["dataMin - 2", "dataMax + 2"]} // 수익률 범위 조정
                 label={{
                   value: "수익률 (%)",
                   angle: 90,
                   position: "insideRight",
                 }}
               />
-
+              <Tooltip />
+              <Legend />
               <Line
-                yAxisId="left" // 왼쪽 Y축 사용
-                type="monotone" // 선 스타일 (부드러운 곡선)
-                dataKey="종가" // 데이터의 '종가' 값 사용
-                stroke="#3b82f6" // 선 색상 (파란색)
-                strokeWidth={2} // 선 두께
-                dot={false} // 점 표시 안함
+                yAxisId="right" // 수익률은 오른쪽 Y축 사용
+                type="monotone"
+                dataKey="profitLoss"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                dot={true}
+                name="수익률 (%)"
               />
+              <Line yAxisId="left" type="monotone" dataKey="averagePrice" stroke="#ef4444" strokeWidth={2} strokeDasharray="5 5" dot={true} name="평단가 ($)" />
+              <Line yAxisId="left" type="monotone" dataKey="close" stroke="#10b981" strokeWidth={2} dot={true} name="종가 ($)" />
             </LineChart>
           </ResponsiveContainer>
         </CardHeader>

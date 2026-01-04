@@ -69,7 +69,7 @@ import Providers from "./providers";
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-50 gap-6">
+    <div className="min-w-screen min-h-screen flex flex-col items-center bg-gray-50 gap-6 overflow-auto">
       <Providers>
         <Header />
         <Content />
