@@ -1,47 +1,70 @@
+// app/providers/DataProvider.tsx
 "use client";
 
-import { useContext, useMemo, useState } from "react";
-import { createContext } from "react";
+import useFetchData from "@/entities/app/queries/use-fecth-data";
+import { DataContextType } from "@/entities/app/types";
+import { createContext, useContext, useMemo } from "react";
 
-type DataType = {
-  days: number;
-  shares: number;
-  averagePrice: number;
-  totalInvestment: number;
-  currentValuation: number;
-  profits: number;
-  profitLoss: number;
-};
+export const DataContext = createContext<DataContextType | undefined>(
+    undefined
+);
 
-interface DataContextType {
-  data: DataType;
-  chartData: DataType[];
-}
+export default function DataProvider({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    const { data: fetchedData, isLoading, error } = useFetchData();
 
-export const DataContext = createContext<DataContextType | undefined>(undefined);
+    // useMemo로 파생 상태 계산 (state 불필요)
+    const chartData = useMemo(() => {
+        return fetchedData || [];
+    }, [fetchedData]);
 
-export default function DataProvider({ children }: { children: React.ReactNode }) {
-  const [chartData, setChartData] = useState<DataType[]>([
-    { days: 1, shares: 4, averagePrice: 38352, totalInvestment: 153410, currentValuation: 153230, profits: -466, profitLoss: 2.39 },
-    { days: 2, shares: 6, averagePrice: 38311, totalInvestment: 229869, currentValuation: 235766, profits: 5484, profitLoss: 2.23 },
-    { days: 3, shares: 8, averagePrice: 38594, totalInvestment: 308756, currentValuation: 315192, profits: 5875, profitLoss: 1.9 },
-    { days: 4, shares: 10, averagePrice: 38631, totalInvestment: 386314, currentValuation: 385452, profits: -1565, profitLoss: -0.41 },
-    { days: 5, shares: 14, averagePrice: 38312, totalInvestment: 536370, currentValuation: 518346, profits: -18979, profitLoss: -3.54 },
-    { days: 6, shares: 18, averagePrice: 38048, totalInvestment: 684864, currentValuation: 667372, profits: -18705, profitLoss: -2.73 },
-    { days: 7, shares: 22, averagePrice: 37720, totalInvestment: 829846, currentValuation: 797402, profits: -33901, profitLoss: -4.09 },
-    { days: 8, shares: 26, averagePrice: 37315, totalInvestment: 967569, currentValuation: 900277, profits: -69041, profitLoss: -7.14 },
-  ]);
-  const [data, setData] = useState<DataType>(chartData[chartData.length - 1]);
+    const cardData = useMemo(() => {
+        if (!chartData.length) return null;
+        return chartData[chartData.length - 1];
+    }, [chartData]);
 
-  const value = useMemo(() => ({ data, chartData }), [data, chartData]);
+    console.log("fetchedData", fetchedData);
 
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+    const value = useMemo(
+        () => ({
+            cardData,
+            chartData,
+            isLoading,
+            error,
+        }),
+        [cardData, chartData, isLoading, error]
+    );
+
+    // 로딩 중
+    if (isLoading) {
+        return (
+            <DataContext.Provider value={value}>
+                <div>데이터 로딩 중...</div>
+            </DataContext.Provider>
+        );
+    }
+
+    // 에러 발생
+    if (error) {
+        return (
+            <DataContext.Provider value={value}>
+                <div>에러 발생: {error.message}</div>
+            </DataContext.Provider>
+        );
+    }
+
+    return (
+        <DataContext.Provider value={value}>{children}</DataContext.Provider>
+    );
 }
 
 export function useData() {
-  const context = useContext(DataContext);
-  if (!context) {
-    throw new Error("useData must be used within DataProvider");
-  }
-  return context;
+    const context = useContext(DataContext);
+    if (!context) {
+        throw new Error("useData must be used within DataProvider");
+    }
+    return context;
 }
