@@ -38,8 +38,6 @@ export default function FormDialog() {
         await addInvestmentData(formData);
     };
 
-    console.log("formData", formData);
-
     return (
         <Dialog open={modalOpen} onOpenChange={onChangeModalState}>
             <form onSubmit={handleSubmit}>

@@ -40,6 +40,16 @@ export default function Content() {
                                 }}
                             />
                             <YAxis
+                                yAxisId="left"
+                                orientation="left"
+                                domain={["dataMin - 5", "dataMax + 5"]} // 최솟값-5 ~ 최댓값+5
+                                label={{
+                                    value: "가격 ($)",
+                                    angle: -90,
+                                    position: "insideLeft",
+                                }}
+                            />
+                            <YAxis
                                 yAxisId="right"
                                 orientation="right"
                                 domain={["dataMin - 2", "dataMax + 2"]} // 수익률 범위 조정
@@ -60,38 +70,8 @@ export default function Content() {
                                 dot={true}
                                 name="수익률 (%)"
                             />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </CardContent>
-            </Card>
-            <Card className="bg-white border-white">
-                <CardHeader>평단가 추이</CardHeader>
-                <CardContent>
-                    <ResponsiveContainer width="100%" height={300}>
-                        <LineChart data={filteredChartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis
-                                dataKey="day"
-                                label={{
-                                    value: "거래일",
-                                    position: "insideBottom",
-                                    offset: -5,
-                                }}
-                            />
-                            <YAxis
-                                yAxisId="right"
-                                orientation="right"
-                                domain={["dataMin - 2", "dataMax + 2"]} // 최솟값-5 ~ 최댓값+5
-                                label={{
-                                    value: "가격 ($)",
-                                    angle: -90,
-                                    position: "insideRight",
-                                }}
-                            />
-                            <Tooltip />
-                            <Legend />
                             <Line
-                                yAxisId="right"
+                                yAxisId="left"
                                 type="monotone"
                                 dataKey="averagePrice"
                                 stroke="#ef4444"
