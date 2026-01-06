@@ -13,6 +13,8 @@ export type DataType = {
 export type DataContextType = {
     cardData: DataType | null;
     chartData: DataType[];
+    modalOpen: boolean;
+    onChangeModalState: () => void;
     isLoading: boolean;
     error: Error | null;
 };

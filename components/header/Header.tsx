@@ -1,9 +1,10 @@
 "use client";
 
 import { useData } from "@/app/providers/DataProvider";
-import { Card, CardContent } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/shadcn/card";
+import { Button } from "../ui/shadcn/button";
 import { formatNumber } from "@/lib/utils";
+import FormDialog from "./form-dialog";
 
 const TEXT_COLOR_BY_FIELD = {
     보유주식: "text-blue-600",
@@ -17,7 +18,9 @@ const TEXT_COLOR_BY_FIELD = {
 type FieldType = keyof typeof TEXT_COLOR_BY_FIELD;
 
 export default function Header() {
-    const { cardData } = useData();
+    const { cardData, modalOpen, onChangeModalState } = useData();
+
+    console.log("modalOpen", modalOpen);
 
     return (
         <div className="w-[90%] bg-gray-50 pt-10">
@@ -25,7 +28,11 @@ export default function Header() {
                 <h1 className="text-3xl font-bold mb-6 text-gray-800">
                     FNGU 무한매수법 1회차
                 </h1>
-                <Button variant="default" className="bg-blue-400 ml-4">
+                <Button
+                    variant="default"
+                    className="bg-blue-400 ml-4"
+                    onClick={onChangeModalState}
+                >
                     ADD
                 </Button>
             </div>
@@ -60,7 +67,7 @@ export default function Header() {
             <div className="grid grid-cols-2 gap-4">
                 <HeaderCard
                     field="수익금"
-                    value={cardData?.profits}
+                    value={formatNumber(cardData ? cardData?.profits : 0)}
                     unit="원"
                 />
                 <HeaderCard
@@ -69,6 +76,7 @@ export default function Header() {
                     unit="%"
                 />
             </div>
+            {modalOpen && <FormDialog />}
         </div>
     );
 }

@@ -3,7 +3,13 @@
 
 import useFetchData from "@/entities/app/queries/use-fecth-data";
 import { DataContextType } from "@/entities/app/types";
-import { createContext, useContext, useMemo } from "react";
+import {
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from "react";
 
 export const DataContext = createContext<DataContextType | undefined>(
     undefined
@@ -16,6 +22,8 @@ export default function DataProvider({
 }) {
     const { data: fetchedData, isLoading, error } = useFetchData();
 
+    const [modalOpen, setModalOpen] = useState(false);
+
     // useMemo로 파생 상태 계산 (state 불필요)
     const chartData = useMemo(() => {
         return fetchedData || [];
@@ -26,16 +34,20 @@ export default function DataProvider({
         return chartData[chartData.length - 1];
     }, [chartData]);
 
-    console.log("fetchedData", fetchedData);
+    const onChangeModalState = useCallback(() => {
+        setModalOpen((prev) => !prev);
+    }, []);
 
     const value = useMemo(
         () => ({
             cardData,
             chartData,
+            modalOpen,
             isLoading,
             error,
+            onChangeModalState,
         }),
-        [cardData, chartData, isLoading, error]
+        [cardData, chartData, modalOpen, isLoading, error, onChangeModalState]
     );
 
     // 로딩 중

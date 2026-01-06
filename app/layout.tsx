@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className="w-full h-full overflow-y-auto overflow-x-hidden">
+            <body className="w-full h-full overflow-y-auto overflow-x-auto">
                 {children}
             </body>
         </html>

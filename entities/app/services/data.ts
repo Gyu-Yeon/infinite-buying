@@ -15,7 +15,7 @@ export async function GET(): Promise<DataType[]> {
     return json.data;
 }
 
-export async function createInvestment(data: CreateInvestmentRequest) {
+export async function addInvestment(data: CreateInvestmentRequest) {
     console.log("📤 데이터 전송:", data);
 
     const response = await fetch("/api/investment", {

@@ -1,11 +1,11 @@
 import React from "react";
 import DataProvider from "./DataProvider";
-import { QueryProviders } from "./query-provider";
+import { QueryProvider } from "./query-provider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
-        <QueryProviders>
+        <QueryProvider>
             <DataProvider>{children}</DataProvider>
-        </QueryProviders>
+        </QueryProvider>
     );
 }
