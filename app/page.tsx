@@ -62,19 +62,19 @@
 //   );
 // }
 
-import Header from "@/components/header/Header";
+import Header from "@/features/header/Header";
 import Providers from "./providers";
-import Content from "@/components/content/content";
-import Footer from "@/components/footer/footer";
+import Content from "@/features/content/content";
+import Footer from "@/features/footer/footer";
 
 export default function Home() {
-    return (
-        <Providers>
-            <div className="min-w-screen min-h-screen flex flex-col items-center bg-gray-50 gap-6 overflow-auto">
-                <Header />
-                <Content />
-                <Footer />
-            </div>
-        </Providers>
-    );
+  return (
+    <Providers>
+      <div className="min-w-screen min-h-screen flex flex-col items-center bg-gray-50 gap-6 overflow-auto">
+        <Header />
+        <Content />
+        <Footer />
+      </div>
+    </Providers>
+  );
 }
